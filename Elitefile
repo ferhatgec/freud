@@ -1,0 +1,30 @@
+required_version is 0.1
+
+set bin_path as         "/usr/bin/"
+set bin      as         "freud"
+
+set sudo     as         "sudo"
+set cpp      as         "c++"
+set standard as std     "c++17"
+set output   as         "{bin_path}{bin}"
+
+set src      as         "./src/"
+set sources  as         "{src}freud.cpp"
+
+for signal "start" [
+    for specific "windows" [
+        use signal "exit"
+    ]
+
+    for exists "{bin_path}clang++" [
+        set cpp as "clang++"
+    ]
+
+    for argument "install" [
+        use exec "{sudo} {cpp} {standard} {sources} -o {output}"
+
+        for exists "{bin_path}{bin}" [
+            println "Installed to {bin_path}{bin}"
+        ]
+    ]
+]
