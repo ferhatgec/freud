@@ -143,11 +143,18 @@ public:
             }
 
             case COLOR_RESET: {
+                if(this->is_align) {
+                    this->get_align_text.append("\x1b[0m"); break;
+                }
                 this->extracted_text.append("\x1b[0m"); break;
             }
 
             default: {
                 if((ch >= 40 && ch <= 49) || (ch >= 100 && ch <= 109)) {
+                    if(this->is_align) {
+                        this->get_align_text.append("\x1b[" + std::to_string(ch - 10) + "m");
+                        break;
+                    }
                     this->extracted_text.append("\x1b[" + std::to_string(ch - 10) + "m");
                 } break;
             }
