@@ -7,6 +7,10 @@
 
 #include <fstream>
 #include <sstream>
+#include <chrono>
+#include <iomanip>
+#include <filesystem>
+#include <ctime> // uuh
 
 extern "C" {
     #include <unistd.h>
@@ -17,8 +21,10 @@ extern "C" {
 #endif
 
 #include "../libs/termiospp/include/termiospp"
+#include "../libs/command/include/command.hpp"
 #include "../libs/fpaper/include/fpaper_extract.hpp"
 #include "../libs/fpaper/include/fpaper.hpp"
+
 #include "../include/freud.hpp"
 #include "../include/freud_helpers.hpp"
 
@@ -117,8 +123,57 @@ void Freud::from(bool is_up) noexcept {
 
 int main(int argc, char** argv) noexcept {
     if(argc < 2) { return 0; }
-
     Freud init;
-    init.init(std::string(argv[argc - 1]));
+    std::string argument(argv[1]); bool is_gazete = false;
+
+    if(argument == "gazete") {
+        if(!std::filesystem::exists("/usr/bin/git")) { return 1; }
+
+        is_gazete = true; std::string time;
+
+        if(argc == 4) {
+            time.append(argv[2]);
+            time.push_back('_'); time.append(argv[3]);
+        } else {
+            // Waiting for C++20's chrono ( or date.h :') )
+            auto now =
+                    std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+
+            std::stringstream data; data << std::put_time(std::localtime(&now), "%m");
+            time.append(std::to_string(std::stoi(data.str())));
+            data.str(std::string()); time.push_back('_');
+            data << std::put_time(std::localtime(&now), "%Y");
+            time.append(std::to_string(std::stoi(data.str()) - 2000));
+        }
+
+        process::New("git")
+            .Arg("clone")
+            .Arg(GAZETE_REPOSITORY)
+            .Arg(std::string(getenv("HOME")) + "/gazete")
+            .Suppress();
+
+        if(std::filesystem::exists(
+                std::string(std::getenv("HOME"))
+                    + "/gazete"
+                    + "/"
+                    + time
+                )) {
+            init.init(
+                    std::string(std::getenv("HOME"))
+                    + "/gazete"
+                    + "/"
+                    + time
+                    + "/"
+                    + "gazete.fpaper");
+        }
+    } else { init.init(std::string(argv[argc - 1])); }
+
     init.init_buffer();
+
+    if(is_gazete) {
+        std::filesystem::remove_all(
+                std::string(std::getenv("HOME"))
+                + "/gazete"
+                + "/");
+    }
 }

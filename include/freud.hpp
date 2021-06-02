@@ -12,6 +12,8 @@
 #include <string>
 #include "defs/freud_defs.h"
 
+#define   GAZETE_REPOSITORY "https://github.com/ferhatgec/gazete"
+
 constexpr i8 escape = 27;
 constexpr i8 up     = 65;
 constexpr i8 down   = 66;

@@ -1,3 +1,7 @@
 [submodule "libs/termiospp"]
 	path = libs/termiospp
 	url = https://github.com/ferhatgec/termiospp.git
+
+[submodule "libs/command"]
+	path = libs/command
+	url = https://github.com/ferhatgec/command.git

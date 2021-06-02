@@ -5,7 +5,7 @@ set bin      as         "freud"
 
 set sudo     as         "sudo"
 set cpp      as         "c++"
-set standard as std     "c++17"
+set standard as std     "c++20"
 set output   as         "{bin_path}{bin}"
 
 set src      as         "./src/"
