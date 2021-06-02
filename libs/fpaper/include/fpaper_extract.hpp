@@ -141,6 +141,16 @@ public:
 
                 get_align_text.clear(); break;
             }
+
+            case COLOR_RESET: {
+                this->extracted_text.append("\x1b[0m"); break;
+            }
+
+            default: {
+                if((ch >= 40 && ch <= 49) || (ch >= 100 && ch <= 109)) {
+                    this->extracted_text.append("\x1b[" + std::to_string(ch - 10) + "m");
+                } break;
+            }
         }
     }
 
