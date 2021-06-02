@@ -65,31 +65,52 @@ public:
         // not platform specific.
         switch(ch) {
             case LIGHT_SET: {
+                if(this->is_align) {
+                    this->get_align_text.append("\x1b[0m"); break;
+                }
                 this->extracted_text.append("\x1b[0m"); break;
             }
 
             case BOLD_SET: {
+                if(this->is_align) {
+                    this->get_align_text.append("\x1b[1m"); break;
+                }
                 this->extracted_text.append("\x1b[1m"); break;
             }
 
             case DIM_SET: {
+                if(this->is_align) {
+                    this->get_align_text.append("\x1b[2m"); break;
+                }
                 this->extracted_text.append("\x1b[2m"); break;
             }
 
             case ITALIC_SET: {
+                if(this->is_align) {
+                    this->get_align_text.append("\x1b[3m"); break;
+                }
                 this->extracted_text.append("\x1b[3m"); break;
             }
 
             case UNDERLINED_SET: {
+                if(this->is_align) {
+                    this->get_align_text.append("\x1b[4m"); break;
+                }
                 this->extracted_text.append("\x1b[4m"); break;
             }
 
             case BLINK_SET: {
+                if(this->is_align) {
+                    this->get_align_text.append("\x1b[5m"); break;
+                }
                 this->extracted_text.append("\x1b[5m"); break;
             }
 
             case RAPID_BLINK_SET: {
                 #if defined(_WIN64) || defined(_WIN32)
+                    if(this->is_align) {
+                        this->get_align_text.append("\x1b[6m"); break;
+                    }
                     this->extracted_text.append("\x1b[6m"); break;
                 #endif // defined(_WIN64) || defined(_WIN32)
             }
